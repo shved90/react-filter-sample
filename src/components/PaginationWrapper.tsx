@@ -1,6 +1,8 @@
-import { ReactElement } from 'react'
+import { ReactElement, useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { Product } from './Product'
+import { ProductCard } from './ProductCard'
+import { ProductFilter } from './ProductFilter'
+import { ProductPagination } from './ProductPagination'
 
 type ProductType = {
     id: number,
@@ -20,15 +22,23 @@ type ProductType = {
 
 const PaginationWrapper = ({ }): ReactElement => {
 
-    const fetchUsers = async () => {
-        const response = await fetch("http://localhost:3010/products?_sort=title&_order=ASC&_start=2&_end=6");
+    const [slug, setSlug] = useState('http://localhost:3010/products')
+
+    const fetchProduct = async () => {
+        const response = await fetch(slug);
         return response.json();
     };
 
-    const { isLoading, error, data } = useQuery<ProductType[]>({
-        queryKey: ['repoData'],
-        queryFn: fetchUsers,
+    const { isLoading, error, data, refetch } = useQuery<ProductType[]>({
+        queryKey: ['productData'],
+        queryFn: fetchProduct,
     })
+
+    useEffect(() => {
+        console.log(slug)
+        refetch()
+        
+    }, [slug])
 
     if (isLoading) return <>'Loading...'</>
 
@@ -37,8 +47,18 @@ const PaginationWrapper = ({ }): ReactElement => {
     if (!data) return <></>
 
     return (
-        <div className='grid grid-cols-4 gap-4'>
-            <Product ProductList={data} />
+        <div className='grid grid-cols-8 gap-4'>
+            <div className='col-span-6 relative'>
+                <h2>Product Collection</h2>
+                <div className='grid grid-cols-4 gap-4'>
+                    <ProductCard ProductList={data} />
+                </div>
+                <ProductPagination />
+            </div>
+            <aside className='col-span-2' aria-label='Sidebar'>
+                <h2>Filter by:</h2>
+                <ProductFilter ProductData={data} SetSlug={setSlug} slug={slug} />
+            </aside>
         </div>
     )
 }
