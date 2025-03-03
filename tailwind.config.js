@@ -18,9 +18,13 @@ module.exports = {
             DEFAULT: '#2b78d5',
             dark: '#125ab1'
           },
+          green: {
+            light: '#53aa34',
+            DEFAULT: '#185c01'
+          },
           navyBlue: {
-            light: '#285abf',
-            DEFAULT: '#123680'
+            light: '#6677aa',
+            DEFAULT: '#001c72'
           }
         },
         borderRadius: {

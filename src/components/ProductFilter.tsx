@@ -1,5 +1,6 @@
-import { Dispatch, ReactElement, SetStateAction } from "react"
+import { Dispatch, ReactElement, SetStateAction, useEffect, useState } from "react"
 import { ProductType } from "./PaginationWrapper"
+import { PriceSlider } from "./PriceSlider"
 
 type ProductProps = {
     ProductData: ProductType[]
@@ -9,13 +10,16 @@ type ProductProps = {
 
 const ProductFilter = ({ ProductData, SetSlug, slug }: ProductProps): ReactElement => {
 
+    let [allTags, setAllTags] = useState([] as string[])
+    const [activeParams, setActiveParams] = useState(new URLSearchParams(window.location.search));
+
     const parseUrlQueries = (url: string, newParam: string): string => {
         const urlObj = new URL(url);
         const searchParams = new URLSearchParams(urlObj.search);
         const [newKey, newValue] = newParam.split("=");
-    
+
         const existingValues = searchParams.getAll(newKey);
-    
+
         newKey === "tags_like"
             ? existingValues.includes(newValue)
                 ? searchParams.delete(newKey, newValue)
@@ -23,33 +27,52 @@ const ProductFilter = ({ ProductData, SetSlug, slug }: ProductProps): ReactEleme
             : existingValues.includes(newValue)
                 ? searchParams.delete(newKey)
                 : searchParams.set(newKey, newValue)
-    
+
         urlObj.search = searchParams.toString();
         return urlObj.toString();
     };
-    
+
     const getUniqueTags = (ProductData: ProductType[]) => {
+        
         return [...new Set(ProductData.flatMap(product => product.tags))];
     }
-    let tags: string[] = getUniqueTags(ProductData)
+    const tags: string[] = getUniqueTags(ProductData)
 
     const buildSlug = (newParam: string) => {
-        parseUrlQueries(slug, newParam)
-        SetSlug(parseUrlQueries(slug, newParam))
+        const newUrl = parseUrlQueries(slug, newParam);
+        SetSlug(newUrl);
+        setActiveParams(new URLSearchParams(new URL(newUrl).search))
     }
 
+    useEffect(() => {
+        setAllTags([...new Set(ProductData.flatMap(product => product.tags))])
+    }, [])
 
     return (
         <div>
-            <h4>Tags</h4>
-            {tags.map((tag) => (
-                <button onClick={() => buildSlug(`tags_like=${tag}`)} className='bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded'>{tag}</button>
+            <h3 className='text-xl font-bold my-3'>Tags</h3>
+            {allTags.map((tag) => (
+                <button onClick={() => buildSlug(`tags_like=${tag}`)} key={tag} className={`py-2 px-4 border-navyBlue font-semibold border rounded ${
+                    activeParams.getAll("tags_like").includes(tag)
+                        ? "bg-navyBlue text-white hover:bg-navyBlue-light"
+                        : "bg-transparent text-navyBlue hover:bg-navyBlue hover:text-white"
+                }`}>{tag}</button>
             ))}
-            <h4>Price</h4>
-            <h4>Subscription</h4>
-            <button onClick={() => buildSlug(`subscription=true`)} className='bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded'>true</button>
-            <button onClick={() => buildSlug(`subscription=false`)} className='bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded'>false</button>
-            <button onClick={() => SetSlug('http://localhost:3010/products?tags_like=Dog&_sort=title&_order=ASC&tags_like=Cat&subscription=false')}>press me</button>
+
+            <h3 className='text-xl font-bold my-3'>Price</h3>
+            <PriceSlider buildSlug={buildSlug} />
+
+            <h3 className='text-xl font-bold my-3'>Subscription</h3>
+            <button onClick={() => buildSlug(`subscription=true`)} className={`py-2 px-4 border-navyBlue font-semibold border rounded ${
+                    activeParams.get("subscription") === "true"
+                        ? "bg-navyBlue text-white hover:bg-navyBlue-light"
+                        : "bg-transparent text-navyBlue hover:bg-navyBlue hover:text-white"
+                }`}>Yes</button>
+            <button onClick={() => buildSlug(`subscription=false`)} className={`py-2 px-4 border-navyBlue font-semibold border rounded ${
+                    activeParams.get("subscription") === "false"
+                        ? "bg-navyBlue text-white hover:bg-navyBlue-light"
+                        : "bg-transparent text-navyBlue hover:bg-navyBlue hover:text-white"
+                }`}>No</button>
         </div>
     )
 }

@@ -36,8 +36,9 @@ const PaginationWrapper = ({ }): ReactElement => {
 
     useEffect(() => {
         console.log(slug)
+        console.log(data)
         refetch()
-        
+
     }, [slug])
 
     if (isLoading) return <>'Loading...'</>
@@ -48,15 +49,22 @@ const PaginationWrapper = ({ }): ReactElement => {
 
     return (
         <div className='grid grid-cols-8 gap-4'>
-            <div className='col-span-6 relative'>
-                <h2>Product Collection</h2>
-                <div className='grid grid-cols-4 gap-4'>
-                    <ProductCard ProductList={data} />
-                </div>
-                <ProductPagination />
+            <div className='col-span-6 relative m-4 mb-20'>
+                <h1 className='text-3xl font-bold mb-6 mx-4'>Product Collection</h1>
+                {data.length ?
+                    <><div className='grid grid-cols-4 gap-4'>
+                        <ProductCard ProductList={data} />
+                    </div>
+                        <ProductPagination number={data.length} /></>
+                    :
+                    <div>
+                        <p>Either no data was returned or your filters are too specific</p>
+                        <button>reset filters</button>
+                    </div>
+                }
             </div>
             <aside className='col-span-2' aria-label='Sidebar'>
-                <h2>Filter by:</h2>
+                <h2 className='text-2xl font-bold my-6'>Filter by:</h2>
                 <ProductFilter ProductData={data} SetSlug={setSlug} slug={slug} />
             </aside>
         </div>
