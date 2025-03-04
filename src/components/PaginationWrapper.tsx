@@ -23,6 +23,7 @@ type ProductType = {
 const PaginationWrapper = ({ }): ReactElement => {
 
     const [slug, setSlug] = useState('http://localhost:3010/products')
+    const [resetFilters, setResetFilters] = useState(false);
 
     const fetchProduct = async () => {
         const response = await fetch(slug);
@@ -33,6 +34,11 @@ const PaginationWrapper = ({ }): ReactElement => {
         queryKey: ['productData'],
         queryFn: fetchProduct,
     })
+
+    const handleResetFilters = () => {
+        setSlug(slug.replace(/\?.*/, "")); // Reset filters in URL
+        setResetFilters(currentFilter => !currentFilter); // Toggle resetFilters to trigger effect in ProductFilter
+    };
 
     useEffect(() => {
         console.log(slug)
@@ -59,13 +65,13 @@ const PaginationWrapper = ({ }): ReactElement => {
                     :
                     <div>
                         <p>Either no data was returned or your filters are too specific</p>
-                        <button onClick={() => {setSlug(slug.replace(/\?.*/, ""))}} className='py-2 px-4 border-navyBlue font-semibold border rounded mr-2 mb-2 bg-navyBlue text-white hover:bg-navyBlue-light'>reset filters</button>
+                        <button onClick={() => {handleResetFilters()}} className='py-2 px-4 border-navyBlue font-semibold border rounded mr-2 mb-2 bg-navyBlue text-white hover:bg-navyBlue-light'>reset filters</button>
                     </div>
                 }
             </div>
             <aside className='col-span-2 bg-[#A4A5FF] px-4 min-h-[100vh]' aria-label='Sidebar'>
                 <h2 className='text-2xl font-bold my-6'>Filter by:</h2>
-                <ProductFilter ProductData={data} SetSlug={setSlug} slug={slug} />
+                <ProductFilter ProductData={data} SetSlug={setSlug} slug={slug} resetFilters={resetFilters} />
             </aside>
         </div>
     )

@@ -5,10 +5,11 @@ import { PriceSlider } from "./PriceSlider"
 type ProductProps = {
     ProductData: ProductType[]
     SetSlug: Dispatch<SetStateAction<string>>
-    slug: string
+    slug: string,
+    resetFilters: boolean
 }
 
-const ProductFilter = ({ ProductData, SetSlug, slug }: ProductProps): ReactElement => {
+const ProductFilter = ({ ProductData, SetSlug, slug, resetFilters }: ProductProps): ReactElement => {
 
     let [allTags, setAllTags] = useState([] as string[])
     const [activeParams, setActiveParams] = useState(new URLSearchParams(window.location.search));
@@ -39,6 +40,10 @@ const ProductFilter = ({ ProductData, SetSlug, slug }: ProductProps): ReactEleme
     }
 
     useEffect(() => {
+        setActiveParams(new URLSearchParams())
+    }, [resetFilters]);
+
+    useEffect(() => {
         setAllTags([...new Set(ProductData.flatMap(product => product.tags))])
     }, [])
 
@@ -56,7 +61,7 @@ const ProductFilter = ({ ProductData, SetSlug, slug }: ProductProps): ReactEleme
             ))}
 
             <h3 className='text-xl font-bold my-3'>Price</h3>
-            <PriceSlider buildSlug={buildSlug} />
+            <PriceSlider buildSlug={buildSlug} resetFilters={resetFilters} />
 
             <h3 className='text-xl font-bold my-3'>Subscription</h3>
             <button onClick={() => buildSlug(`subscription=true`)} className={`py-2 px-4 border-navyBlue font-semibold border rounded mr-2 mb-2 ${
