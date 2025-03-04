@@ -32,12 +32,6 @@ const ProductFilter = ({ ProductData, SetSlug, slug }: ProductProps): ReactEleme
         return urlObj.toString();
     };
 
-    const getUniqueTags = (ProductData: ProductType[]) => {
-        
-        return [...new Set(ProductData.flatMap(product => product.tags))];
-    }
-    const tags: string[] = getUniqueTags(ProductData)
-
     const buildSlug = (newParam: string) => {
         const newUrl = parseUrlQueries(slug, newParam);
         SetSlug(newUrl);
@@ -49,10 +43,12 @@ const ProductFilter = ({ ProductData, SetSlug, slug }: ProductProps): ReactEleme
     }, [])
 
     return (
-        <div>
+        <div className=''>
+            <h3 className='text-xl font-bold my-3'>Product name</h3>
+            <input type='text' onChange={(event) => buildSlug(`title_like=${event.target.value}`)} />
             <h3 className='text-xl font-bold my-3'>Tags</h3>
             {allTags.map((tag) => (
-                <button onClick={() => buildSlug(`tags_like=${tag}`)} key={tag} className={`py-2 px-4 border-navyBlue font-semibold border rounded ${
+                <button onClick={() => buildSlug(`tags_like=${tag}`)} key={tag} className={`py-2 px-4 border-navyBlue font-semibold border rounded mr-2 mb-2 ${
                     activeParams.getAll("tags_like").includes(tag)
                         ? "bg-navyBlue text-white hover:bg-navyBlue-light"
                         : "bg-transparent text-navyBlue hover:bg-navyBlue hover:text-white"
@@ -63,12 +59,12 @@ const ProductFilter = ({ ProductData, SetSlug, slug }: ProductProps): ReactEleme
             <PriceSlider buildSlug={buildSlug} />
 
             <h3 className='text-xl font-bold my-3'>Subscription</h3>
-            <button onClick={() => buildSlug(`subscription=true`)} className={`py-2 px-4 border-navyBlue font-semibold border rounded ${
+            <button onClick={() => buildSlug(`subscription=true`)} className={`py-2 px-4 border-navyBlue font-semibold border rounded mr-2 mb-2 ${
                     activeParams.get("subscription") === "true"
                         ? "bg-navyBlue text-white hover:bg-navyBlue-light"
                         : "bg-transparent text-navyBlue hover:bg-navyBlue hover:text-white"
                 }`}>Yes</button>
-            <button onClick={() => buildSlug(`subscription=false`)} className={`py-2 px-4 border-navyBlue font-semibold border rounded ${
+            <button onClick={() => buildSlug(`subscription=false`)} className={`py-2 px-4 border-navyBlue font-semibold border rounded mr-2 mb-2 ${
                     activeParams.get("subscription") === "false"
                         ? "bg-navyBlue text-white hover:bg-navyBlue-light"
                         : "bg-transparent text-navyBlue hover:bg-navyBlue hover:text-white"

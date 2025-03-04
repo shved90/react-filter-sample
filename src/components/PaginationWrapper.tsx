@@ -59,11 +59,11 @@ const PaginationWrapper = ({ }): ReactElement => {
                     :
                     <div>
                         <p>Either no data was returned or your filters are too specific</p>
-                        <button>reset filters</button>
+                        <button onClick={() => {setSlug(slug.replace(/\?.*/, ""))}} className='py-2 px-4 border-navyBlue font-semibold border rounded mr-2 mb-2 bg-navyBlue text-white hover:bg-navyBlue-light'>reset filters</button>
                     </div>
                 }
             </div>
-            <aside className='col-span-2' aria-label='Sidebar'>
+            <aside className='col-span-2 bg-[#A4A5FF] px-4 min-h-[100vh]' aria-label='Sidebar'>
                 <h2 className='text-2xl font-bold my-6'>Filter by:</h2>
                 <ProductFilter ProductData={data} SetSlug={setSlug} slug={slug} />
             </aside>
