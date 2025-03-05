@@ -17,7 +17,7 @@ const ProductCard = ({ ProductList }: ProductProps): ReactElement => {
                                 <p className='uppercase'>{product.option_value}</p>
                                 <p className='uppercase'>{product.sku}</p>
                             </div>
-                            <h2 className='mb-2 text-2xl/[1.5rem] font-bold tracking-tight text-navyBlue dark:text-white'>{product.title}</h2>
+                            <h2 className='mb-2 text-2xl/[1.5rem] font-bold tracking-tight text-navyBlue dark:text-navyBlue'>{product.title}</h2>
                             {product.subscription?
                                 <p className='text-navyBlue mb-2'>Subscribe for {product.subscription_discount}% discount</p>
                             :''}

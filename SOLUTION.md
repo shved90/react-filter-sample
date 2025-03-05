@@ -77,7 +77,7 @@ I am passing data around components via props, and didnt envision this as a limi
 The way the API works out of the box doesnt match well with the way product data is setup - specifically tags. API works by adding results that match, while I think basic user expectation when filtering is removing results. I would expect selecting Cats and Dogs tags at the same time would filter product to only show items that have both tags. Currently API returns results for items that have either one or the other or both tags, which can be confusing and misleading if not doublechecked.
 
 #### Button component
-I'd like to clean up the app and neaten up components better. Buttons would be first port of call to be their own reusable component. Buttons are notoriously complex components as they need to have many states and conditions to them, i.e toggle/url/text/notext/alt-color-scheme etc. so I left it as is - there were few instances anyway but working on the app for longer I'd definitely separate it to its own reusable chunk.
+I'd like to clean up the app and neaten up components better. I have prorotyped button component to show how tailwind classes could be managed. Button component can create basic button, and more complex button with active/inactive state, without duplicating classes. It also takes into account different theming and lays out near-infinite number of tailwind classes into a manageable readable structure.
 I would also couple button toggle state with current search params. Currently they are done separately, but developing app further will require coupling so using localStorage and restoring or resetting search state would be functional and filter buttons/sliders would react.
 
 #### Responsiveness and Theming

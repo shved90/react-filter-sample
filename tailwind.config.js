@@ -6,9 +6,13 @@ module.exports = {
       extend: {
         colors: {
           black: {
-            light: '#313944',
+            lighter: '#1c1c1c',
+            light: '#121212',
             DEFAULT: '#000',
             dark: '#202a37'
+          },
+          offwhite: {
+            DEFAULT: '#aaa'
           },
           white: {
             DEFAULT: '#fff'
@@ -23,7 +27,8 @@ module.exports = {
             DEFAULT: '#185c01'
           },
           navyBlue: {
-            light: '#6677aa',
+            lighter: '#6677aa',
+            light: '#0040d7',
             DEFAULT: '#001c72'
           }
         },

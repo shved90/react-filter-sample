@@ -1,7 +1,7 @@
 import { Dispatch, ReactElement, SetStateAction, useEffect, useState } from "react"
 import { ProductType } from "./PaginationWrapper"
 import { PriceSlider } from "./PriceSlider"
-
+import { ProductButton } from "./ProductButton"
 type ProductProps = {
     ProductData: ProductType[]
     SetSlug: Dispatch<SetStateAction<string>>
@@ -48,32 +48,29 @@ const ProductFilter = ({ ProductData, SetSlug, slug, resetFilters }: ProductProp
     }, [])
 
     return (
-        <div className=''>
-            <h3 className='text-xl font-bold my-3'>Product name</h3>
-            <input type='text' onChange={(event) => buildSlug(`title_like=${event.target.value}`)} />
-            <h3 className='text-xl font-bold my-3'>Tags</h3>
-            {allTags.map((tag) => (
-                <button onClick={() => buildSlug(`tags_like=${tag}`)} key={tag} className={`py-2 px-4 border-navyBlue font-semibold border rounded mr-2 mb-2 ${
-                    activeParams.getAll("tags_like").includes(tag)
-                        ? "bg-navyBlue text-white hover:bg-navyBlue-light"
-                        : "bg-transparent text-navyBlue hover:bg-navyBlue hover:text-white"
-                }`}>{tag}</button>
-            ))}
+        <div className='grid divide-y divide-offwhite gap-8'>
+            <div className=''>
+                <h3 className='text-xl font-bold my-4 dark:text-offwhite'>Product name</h3>
+                <input type="text" onChange={(event) => buildSlug(`title_like=${event.target.value}`)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="product name" />
+            </div>
+                
+            <div>
+                <h3 className='text-xl font-bold my-4 dark:text-offwhite'>Tags</h3>
+                {allTags.map((tag) => (
+                    <ProductButton key={tag}  buildSlug={buildSlug} activeParams={activeParams} newParam={`tags_like=${tag}`} buttonText={tag} />
+                ))}
+            </div>
 
-            <h3 className='text-xl font-bold my-3'>Price</h3>
-            <PriceSlider buildSlug={buildSlug} resetFilters={resetFilters} />
+            <div>
+                <h3 className='text-xl font-bold my-4 dark:text-offwhite'>Price</h3>
+                <PriceSlider buildSlug={buildSlug} resetFilters={resetFilters} />
+            </div>
 
-            <h3 className='text-xl font-bold my-3'>Subscription</h3>
-            <button onClick={() => buildSlug(`subscription=true`)} className={`py-2 px-4 border-navyBlue font-semibold border rounded mr-2 mb-2 ${
-                    activeParams.get("subscription") === "true"
-                        ? "bg-navyBlue text-white hover:bg-navyBlue-light"
-                        : "bg-transparent text-navyBlue hover:bg-navyBlue hover:text-white"
-                }`}>Yes</button>
-            <button onClick={() => buildSlug(`subscription=false`)} className={`py-2 px-4 border-navyBlue font-semibold border rounded mr-2 mb-2 ${
-                    activeParams.get("subscription") === "false"
-                        ? "bg-navyBlue text-white hover:bg-navyBlue-light"
-                        : "bg-transparent text-navyBlue hover:bg-navyBlue hover:text-white"
-                }`}>No</button>
+            <div>
+                <h3 className='text-xl font-bold my-4 dark:text-offwhite'>Subscription</h3>
+                <ProductButton buildSlug={buildSlug} activeParams={activeParams} newParam={'subscription=true'} buttonText={'Yes'} />
+                <ProductButton buildSlug={buildSlug} activeParams={activeParams} newParam={'subscription=false'} buttonText={'No'} />
+            </div>
         </div>
     )
 }

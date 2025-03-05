@@ -69,8 +69,8 @@ const PaginationWrapper = ({ }): ReactElement => {
                     </div>
                 }
             </div>
-            <aside className='col-span-2 bg-[#A4A5FF] px-4 min-h-[100vh]' aria-label='Sidebar'>
-                <h2 className='text-2xl font-bold my-6'>Filter by:</h2>
+            <aside className='col-span-2 bg-navyBlue-lighter dark:bg-black-light px-4 min-h-[100vh]' aria-label='Sidebar'>
+                <h2 className='text-2xl font-bold my-6 dark:text-offwhite'>Filter by:</h2>
                 <ProductFilter ProductData={data} SetSlug={setSlug} slug={slug} resetFilters={resetFilters} />
             </aside>
         </div>

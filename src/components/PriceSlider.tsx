@@ -1,5 +1,4 @@
 import { ReactElement, useState, useEffect } from "react"
-import { ProductType } from "./PaginationWrapper"
 
 type PriceSliderProps = {
     buildSlug: (newParam: string) => void
@@ -9,7 +8,6 @@ type PriceSliderProps = {
 const PriceSlider = ({ buildSlug, resetFilters }: PriceSliderProps): ReactElement => {
     const defaultValue = 150
     const [sliderValue, setSliderValue] = useState(defaultValue);
-    let priceValue = document.querySelector("#priceSelected")
 
     const sliderAction = (value: string) => {
         setSliderValue(Number(value))
@@ -22,7 +20,7 @@ const PriceSlider = ({ buildSlug, resetFilters }: PriceSliderProps): ReactElemen
 
     return (
         <div>
-            <label htmlFor="priceRange" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            <label htmlFor="priceRange" className="block mb-2 text-sm font-medium text-gray-900 dark:text-offwhite">
                 Select price limit:
             </label>
             <input
@@ -37,14 +35,11 @@ const PriceSlider = ({ buildSlug, resetFilters }: PriceSliderProps): ReactElemen
                 className="w-[95%] h-2 bg-gray-200 rounded-lg cursor-pointer"
             />
             <datalist id="priceValues" className="flex justify-between w-[95%]">
-                <option value="0" label="0"></option>
-                <option value="30" label="30"></option>
-                <option value="60" label="60"></option>
-                <option value="90" label="90"></option>
-                <option value="120" label="120"></option>
-                <option value="150" label="150"></option>
+                {[0, 30, 60, 90, 120, 150].map((price) => (
+                    <option className='p-0 w-[20px] dark:text-offwhite' key={price} value={price} label={price.toString()}></option>
+                ))}
             </datalist>
-            <p>Price selected: <output id="priceSelected">{sliderValue}</output></p>
+            <p className='dark:text-offwhite'>Price selected: <output id="priceSelected">{sliderValue}</output></p>
         </div>
     );
 }
